@@ -1,0 +1,51 @@
+backend:
+  name: github
+  repo: SayanBharel/CaliforniaHealthBoostClub
+  branch: main
+  base_url: https://sveltia-cms-auth.chetanbharel.workers.dev
+
+media_folder: "admin/uploads"
+public_folder: "/admin/uploads"
+
+collections:
+  - name: "site"
+    label: "Site Content"
+    files:
+      - name: "content"
+        label: "Meetings, Officers & Gallery"
+        file: "content.json"
+        fields:
+          - label: "Meeting Info"
+            name: "meeting"
+            widget: "object"
+            fields:
+              - { label: "Schedule (e.g. Every other Wednesday)", name: "schedule", widget: "string" }
+              - { label: "Time & Location", name: "time_location", widget: "string" }
+              - { label: "Advisor", name: "advisor", widget: "string" }
+
+          - label: "Events"
+            name: "events"
+            widget: "list"
+            summary: "{{title}}"
+            fields:
+              - { label: "Date", name: "date", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "desc", widget: "text" }
+
+          - label: "Officers"
+            name: "officers"
+            widget: "list"
+            summary: "{{name}} — {{role}}"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Role", name: "role", widget: "string" }
+
+          - label: "Gallery Photos"
+            name: "gallery"
+            widget: "list"
+            summary: "{{caption}}"
+            fields:
+              - { label: "Caption", name: "caption", widget: "string" }
+              - { label: "Photo", name: "image", widget: "image", required: false }
+
+          - { label: "Footer contact email", name: "footer_contact", widget: "string" }
