@@ -1,1 +1,44 @@
+{
+  "meeting": {
+    "schedule": "Every other Wednesday",
+    "time_location": "At lunch · Room pending",
+    "advisor": "Ms. Nootbar · nnootbar@esusd.org"
+  },
+  "events": [
+    {
+      "date": "Add date",
+      "title": "Sun Safety Day",
+      "desc": "Talking to our community about sun safety and skin cancer prevention."
+    },
+    {
+      "date": "Add date",
+      "title": "Journal club: preventable disease",
+      "desc": "A student-friendly walkthrough of a recent public health study, no medical background needed."
+    },
+    {
+      "date": "Add date",
+      "title": "Guest speaker: local physician",
+      "desc": "A Q&A on what the path to medicine actually looks like, from pre-med to residency."
+    },
+    {
+      "date": "Add date",
+      "title": "Senior living community visit",
+      "desc": "Talking with residents about preventable illness and fall prevention."
+    }
+  ],
+  "officers": [
+    { "name": "Sayan Bharel", "role": "President and Founder" },
+    { "name": "Evan Barry", "role": "Co-President" },
+    { "name": "Add Name", "role": "Vice President" },
+    { "name": "Add Name", "role": "Secretary" },
+    { "name": "Add Name", "role": "Treasurer" },
+    { "name": "Add Name", "role": "Events Coordinator" }
+  ],
+  "gallery": [
+    { "caption": "Add photo — meeting recap", "image": "" },
+    { "caption": "Add photo — event highlight", "image": "" },
+    { "caption": "Add photo — community outreach", "image": "" }
+  ],
+  "footer_contact": "Add club contact email here"
+}
 
