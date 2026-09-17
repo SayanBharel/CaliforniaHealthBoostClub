@@ -6,7 +6,7 @@
   },
   "events": [
     {
-      "date": "Add date",
+      "date": "Tentatively 10/14/26",
       "title": "Sun Safety Day",
       "desc": "Talking to our community about sun safety and skin cancer prevention."
     },
@@ -27,18 +27,44 @@
     }
   ],
   "officers": [
-    { "name": "Sayan Bharel", "role": "President and Founder" },
-    { "name": "Evan Barry", "role": "Co-President" },
-    { "name": "Add Name", "role": "Vice President" },
-    { "name": "Add Name", "role": "Secretary" },
-    { "name": "Add Name", "role": "Treasurer" },
-    { "name": "Add Name", "role": "Events Coordinator" }
+    {
+      "name": "Sayan Bharel",
+      "role": "President and Founder"
+    },
+    {
+      "name": "Evan Barry",
+      "role": "Co-President"
+    },
+    {
+      "name": "Add Name",
+      "role": "Vice President"
+    },
+    {
+      "name": "Add Name",
+      "role": "Secretary"
+    },
+    {
+      "name": "Add Name",
+      "role": "Treasurer"
+    },
+    {
+      "name": "Add Name",
+      "role": "Events Coordinator"
+    }
   ],
   "gallery": [
-    { "caption": "Add photo — meeting recap", "image": "" },
-    { "caption": "Add photo — event highlight", "image": "" },
-    { "caption": "Add photo — community outreach", "image": "" }
+    {
+      "caption": "Add photo — meeting recap",
+      "image": ""
+    },
+    {
+      "caption": "Add photo — event highlight",
+      "image": ""
+    },
+    {
+      "caption": "Add photo — community outreach",
+      "image": ""
+    }
   ],
   "footer_contact": "Add club contact email here"
 }
-
