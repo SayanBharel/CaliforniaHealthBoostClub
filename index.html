@@ -699,7 +699,7 @@
           </div>
           <button type="submit" class="btn btn-primary">Send my info</button>
           <p class="form-status" id="formStatus" role="status"></p>
-          <p class="form-note">Submitting opens your email app with these details pre-filled, addressed to the club officers.</p>
+          <p class="form-note">Submitting sends your info directly to the club officers.</p>
         </form>
       </div>
     </div>
@@ -730,30 +730,30 @@
 
   const form = document.getElementById('joinForm');
   const status = document.getElementById('formStatus');
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = document.getElementById('name').value.trim();
-    const grade = document.getElementById('grade').value;
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const message = document.getElementById('message').value.trim();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    status.textContent = 'Sending…';
 
-    const subject = encodeURIComponent('Health Boost Club — new member interest');
-    const bodyLines = [
-      `Name: ${name}`,
-      `Grade: ${grade}`,
-      `Email: ${email}`,
-      phone ? `Phone: ${phone}` : '',
-      message ? `Message: ${message}` : ''
-    ].filter(Boolean);
-    const body = encodeURIComponent(bodyLines.join('\n'));
+    try {
+      const response = await fetch('https://formspree.io/f/xwlpkzjn', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      });
 
-    const contactEl = document.getElementById('footerContact');
-    const contactText = contactEl ? contactEl.textContent.trim() : '';
-    const mailTo = contactText.includes('@') ? contactText : '';
-
-    window.location.href = `mailto:${mailTo}?subject=${subject}&body=${body}`;
-    status.textContent = 'Opening your email app…';
+      if (response.ok) {
+        status.textContent = "Thanks! We've got your info and will be in touch.";
+        form.reset();
+      } else {
+        status.textContent = 'Something went wrong — please try again.';
+        submitBtn.disabled = false;
+      }
+    } catch (err) {
+      status.textContent = 'Something went wrong — please try again.';
+      submitBtn.disabled = false;
+    }
   });
 
   // ---- Load editable content from content.json (edited via /admin) ----
