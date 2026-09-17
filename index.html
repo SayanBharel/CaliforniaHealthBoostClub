@@ -453,83 +453,6 @@
     font-size: 0.9rem;
     color: var(--ink-soft);
   }
-
-  /* ---------- Admin / edit mode ---------- */
-  .admin-bar {
-    position: fixed;
-    left: 0; right: 0; bottom: 0;
-    z-index: 200;
-    display: none;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 14px 24px;
-    background: var(--ink);
-    color: var(--cream);
-    font-size: 0.92rem;
-    box-shadow: 0 -6px 18px rgba(0,0,0,0.12);
-  }
-  .admin-bar.visible { display: flex; flex-wrap: wrap; }
-  .admin-bar .admin-label { font-weight: 700; }
-  .admin-bar .admin-status { font-size: 0.85rem; opacity: 0.85; }
-  .admin-bar .admin-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-  .admin-bar button {
-    font-family: inherit;
-    font-size: 0.9rem;
-    font-weight: 700;
-    padding: 9px 18px;
-    border-radius: 999px;
-    border: 1.5px solid var(--cream);
-    background: transparent;
-    color: var(--cream);
-    cursor: pointer;
-  }
-  .admin-bar button.primary { background: var(--cream); color: var(--ink); }
-  .admin-bar button:disabled { opacity: 0.6; cursor: default; }
-
-  body.edit-mode { padding-bottom: 76px; }
-  body.edit-mode .editable {
-    outline: 1.5px dashed var(--maroon);
-    outline-offset: 3px;
-    border-radius: 4px;
-    cursor: text;
-  }
-  body.edit-mode .editable:focus { outline-style: solid; }
-
-  .edit-only { display: none; }
-  body.edit-mode .edit-only { display: inline-flex; }
-
-  .remove-btn {
-    border: none;
-    background: var(--maroon);
-    color: #fff;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    font-size: 0.8rem;
-    line-height: 1;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .add-btn {
-    border: 1.5px dashed var(--maroon);
-    background: transparent;
-    color: var(--maroon);
-    font-weight: 700;
-    font-size: 0.9rem;
-    padding: 10px 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-family: inherit;
-  }
-
-  .officer { position: relative; }
-  .officer .remove-btn { position: absolute; top: 0; right: 0; }
-
-  .event-list li { position: relative; padding-right: 30px; }
-  .event-list li .remove-btn { position: absolute; top: 16px; right: 0; }
 </style>
 </head>
 <body>
@@ -624,48 +547,14 @@
       <div class="meet-grid">
         <div class="meet-card">
           <p class="label">Regular meetings</p>
-          <p class="big editable">Every other Wednesday</p>
-          <p class="sub editable">At lunch · Room pending</p>
+          <p class="big" id="meetingSchedule">Every other Wednesday</p>
+          <p class="sub" id="meetingTimeLocation">At lunch · Room pending</p>
           <div class="divider"></div>
           <p class="label">Advisor</p>
-          <p class="sub editable">Ms. Nootbar · nnootbar@esusd.org</p>
+          <p class="sub" id="meetingAdvisor">Ms. Nootbar · nnootbar@esusd.org</p>
         </div>
         <div>
-          <ul class="event-list" id="eventList">
-            <li>
-              <span class="event-date editable">Add date</span>
-              <div>
-                <div class="event-title editable">Sun Safety Day</div>
-                <div class="event-desc editable">Talking to our community about sun safety and skin cancer prevention.</div>
-              </div>
-              <button type="button" class="remove-btn edit-only" title="Remove event" onclick="this.closest('li').remove()">×</button>
-            </li>
-            <li>
-              <span class="event-date editable">Add date</span>
-              <div>
-                <div class="event-title editable">Journal club: preventable disease</div>
-                <div class="event-desc editable">A student-friendly walkthrough of a recent public health study, no medical background needed.</div>
-              </div>
-              <button type="button" class="remove-btn edit-only" title="Remove event" onclick="this.closest('li').remove()">×</button>
-            </li>
-            <li>
-              <span class="event-date editable">Add date</span>
-              <div>
-                <div class="event-title editable">Guest speaker: local physician</div>
-                <div class="event-desc editable">A Q&A on what the path to medicine actually looks like, from pre-med to residency.</div>
-              </div>
-              <button type="button" class="remove-btn edit-only" title="Remove event" onclick="this.closest('li').remove()">×</button>
-            </li>
-            <li>
-              <span class="event-date editable">Add date</span>
-              <div>
-                <div class="event-title editable">Senior living community visit</div>
-                <div class="event-desc editable">Talking with residents about preventable illness and fall prevention.</div>
-              </div>
-              <button type="button" class="remove-btn edit-only" title="Remove event" onclick="this.closest('li').remove()">×</button>
-            </li>
-          </ul>
-          <button type="button" id="addEventBtn" class="add-btn edit-only" style="margin-top:16px; width:100%;">+ Add event</button>
+          <ul class="event-list" id="eventList"></ul>
         </div>
       </div>
     </div>
@@ -677,45 +566,7 @@
         <h2>Club leadership</h2>
         <p>Have a question about the club? Any officer below is happy to help.</p>
       </div>
-      <div class="officers" id="officerGrid">
-        <div class="officer">
-          <button type="button" class="remove-btn edit-only" title="Remove officer" onclick="this.closest('.officer').remove()">×</button>
-          <div class="avatar">S</div>
-          <h3 class="editable">Sayan Bharel</h3>
-          <p class="role editable">President and Founder</p>
-        </div>
-        <div class="officer">
-          <button type="button" class="remove-btn edit-only" title="Remove officer" onclick="this.closest('.officer').remove()">×</button>
-          <div class="avatar">E</div>
-          <h3 class="editable">Evan Barry</h3>
-          <p class="role editable">Co-President</p>
-        </div>
-        <div class="officer">
-          <button type="button" class="remove-btn edit-only" title="Remove officer" onclick="this.closest('.officer').remove()">×</button>
-          <div class="avatar">B</div>
-          <h3 class="editable">Add Name</h3>
-          <p class="role editable">Vice President</p>
-        </div>
-        <div class="officer">
-          <button type="button" class="remove-btn edit-only" title="Remove officer" onclick="this.closest('.officer').remove()">×</button>
-          <div class="avatar">C</div>
-          <h3 class="editable">Add Name</h3>
-          <p class="role editable">Secretary</p>
-        </div>
-        <div class="officer">
-          <button type="button" class="remove-btn edit-only" title="Remove officer" onclick="this.closest('.officer').remove()">×</button>
-          <div class="avatar">D</div>
-          <h3 class="editable">Add Name</h3>
-          <p class="role editable">Treasurer</p>
-        </div>
-        <div class="officer">
-          <button type="button" class="remove-btn edit-only" title="Remove officer" onclick="this.closest('.officer').remove()">×</button>
-          <div class="avatar">E</div>
-          <h3 class="editable">Add Name</h3>
-          <p class="role editable">Events Coordinator</p>
-        </div>
-      </div>
-      <button type="button" id="addOfficerBtn" class="add-btn edit-only" style="margin-top:24px;">+ Add officer</button>
+      <div class="officers" id="officerGrid"></div>
     </div>
   </section>
 
@@ -725,26 +576,7 @@
         <h2>Club moments</h2>
         <p>Photos from meetings and events — swap these placeholders for your own shots.</p>
       </div>
-      <div class="gallery">
-        <figure class="shot">
-          <div class="frame">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="10" r="1.5" fill="currentColor"/><path d="M3 16l5-4 4 3 3-2 6 5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-          </div>
-          <figcaption class="editable">Add photo — meeting recap</figcaption>
-        </figure>
-        <figure class="shot">
-          <div class="frame">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="10" r="1.5" fill="currentColor"/><path d="M3 16l5-4 4 3 3-2 6 5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-          </div>
-          <figcaption class="editable">Add photo — event highlight</figcaption>
-        </figure>
-        <figure class="shot">
-          <div class="frame">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="10" r="1.5" fill="currentColor"/><path d="M3 16l5-4 4 3 3-2 6 5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-          </div>
-          <figcaption class="editable">Add photo — community outreach</figcaption>
-        </figure>
-      </div>
+      <div class="gallery" id="galleryGrid"></div>
     </div>
   </section>
 
@@ -800,19 +632,9 @@
 <footer>
   <div class="wrap foot-row">
     <span>California Health Boost Club · El Segundo High School</span>
-    <span id="footerContact" class="editable">Add club contact email here</span>
+    <span id="footerContact">Add club contact email here</span>
   </div>
 </footer>
-
-<div class="admin-bar" id="adminBar">
-  <span class="admin-label">Leadership edit mode</span>
-  <span class="admin-status" id="adminStatus"></span>
-  <div class="admin-actions">
-    <button type="button" id="editToggleBtn">Edit page</button>
-    <button type="button" id="cancelBtn" class="edit-only">Cancel</button>
-    <button type="button" id="saveBtn" class="primary edit-only">Save changes</button>
-  </div>
-</div>
 
 <script>
   const menuToggle = document.getElementById('menuToggle');
@@ -856,94 +678,82 @@
     status.textContent = 'Opening your email app…';
   });
 
-  // ---- Leadership edit mode ----
-  (async function initAdmin() {
-    const adminBar = document.getElementById('adminBar');
-    const editBtn = document.getElementById('editToggleBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const saveBtn = document.getElementById('saveBtn');
-    const statusEl = document.getElementById('adminStatus');
+  // ---- Load editable content from content.json (edited via /admin) ----
+  function galleryFrameSVG() {
+    return '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="10" r="1.5" fill="currentColor"/><path d="M3 16l5-4 4 3 3-2 6 5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+  }
 
-    let userCap = null;
-    let artifactCap = null;
-    try {
-      if (window.claude && typeof window.claude.use === 'function') {
-        userCap = await window.claude.use('user');
-        artifactCap = await window.claude.use('artifact');
+  fetch('content.json?_=' + Date.now())
+    .then(res => res.ok ? res.json() : Promise.reject(new Error('no content.json')))
+    .then(data => {
+      // Meeting info
+      if (data.meeting) {
+        const scheduleEl = document.getElementById('meetingSchedule');
+        const timeLocEl = document.getElementById('meetingTimeLocation');
+        const advisorEl = document.getElementById('meetingAdvisor');
+        if (scheduleEl && data.meeting.schedule) scheduleEl.textContent = data.meeting.schedule;
+        if (timeLocEl && data.meeting.time_location) timeLocEl.textContent = data.meeting.time_location;
+        if (advisorEl && data.meeting.advisor) advisorEl.textContent = data.meeting.advisor;
       }
-    } catch (e) {
-      // Not running inside an artifact viewer that grants these — no edit UI.
-    }
 
-    const canEdit = !!(userCap && typeof userCap.canEdit === 'function' && userCap.canEdit());
-    if (!canEdit || !artifactCap) return;
-
-    adminBar.classList.add('visible');
-
-    function setEditing(on) {
-      document.body.classList.toggle('edit-mode', on);
-      document.querySelectorAll('.editable').forEach(el => {
-        el.setAttribute('contenteditable', on ? 'true' : 'false');
-      });
-      editBtn.style.display = on ? 'none' : 'inline-flex';
-      if (!on) statusEl.textContent = '';
-    }
-
-    editBtn.addEventListener('click', () => setEditing(true));
-    cancelBtn.addEventListener('click', () => location.reload());
-
-    const addEventBtn = document.getElementById('addEventBtn');
-    if (addEventBtn) {
-      addEventBtn.addEventListener('click', () => {
+      // Events
+      if (Array.isArray(data.events)) {
         const list = document.getElementById('eventList');
-        const li = document.createElement('li');
-        li.innerHTML =
-          '<span class="event-date editable" contenteditable="true">Add date</span>' +
-          '<div>' +
-          '<div class="event-title editable" contenteditable="true">New event</div>' +
-          '<div class="event-desc editable" contenteditable="true">Add a short description.</div>' +
-          '</div>' +
-          '<button type="button" class="remove-btn edit-only" title="Remove event" onclick="this.closest(\'li\').remove()">×</button>';
-        list.appendChild(li);
-      });
-    }
-
-    const addOfficerBtn = document.getElementById('addOfficerBtn');
-    if (addOfficerBtn) {
-      addOfficerBtn.addEventListener('click', () => {
-        const grid = document.getElementById('officerGrid');
-        const div = document.createElement('div');
-        div.className = 'officer';
-        div.innerHTML =
-          '<button type="button" class="remove-btn edit-only" title="Remove officer" onclick="this.closest(\'.officer\').remove()">×</button>' +
-          '<div class="avatar">?</div>' +
-          '<h3 class="editable" contenteditable="true">Add Name</h3>' +
-          '<p class="role editable" contenteditable="true">Add role</p>';
-        grid.appendChild(div);
-      });
-    }
-
-    saveBtn.addEventListener('click', async () => {
-      saveBtn.disabled = true;
-      cancelBtn.disabled = true;
-      statusEl.textContent = 'Saving…';
-      setEditing(false);
-      const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-      try {
-        await artifactCap.publish(html);
-        statusEl.textContent = 'Saved — reloading for everyone…';
-      } catch (e) {
-        saveBtn.disabled = false;
-        cancelBtn.disabled = false;
-        if (e && e.code === 'conflict') {
-          statusEl.textContent = 'Someone else saved changes first — reloading with theirs.';
-          location.reload();
-        } else {
-          statusEl.textContent = 'Could not save. Please try again.';
-        }
+        list.innerHTML = '';
+        data.events.forEach(ev => {
+          const li = document.createElement('li');
+          li.innerHTML =
+            '<span class="event-date">' + (ev.date || '') + '</span>' +
+            '<div>' +
+            '<div class="event-title">' + (ev.title || '') + '</div>' +
+            '<div class="event-desc">' + (ev.desc || '') + '</div>' +
+            '</div>';
+          list.appendChild(li);
+        });
       }
+
+      // Officers
+      if (Array.isArray(data.officers)) {
+        const grid = document.getElementById('officerGrid');
+        grid.innerHTML = '';
+        data.officers.forEach(o => {
+          const div = document.createElement('div');
+          div.className = 'officer';
+          const initial = (o.name || '?').trim().charAt(0).toUpperCase() || '?';
+          div.innerHTML =
+            '<div class="avatar">' + initial + '</div>' +
+            '<h3>' + (o.name || 'Add Name') + '</h3>' +
+            '<p class="role">' + (o.role || '') + '</p>';
+          grid.appendChild(div);
+        });
+      }
+
+      // Gallery
+      if (Array.isArray(data.gallery)) {
+        const grid = document.getElementById('galleryGrid');
+        grid.innerHTML = '';
+        data.gallery.forEach(shot => {
+          const fig = document.createElement('figure');
+          fig.className = 'shot';
+          const frameInner = shot.image
+            ? '<img src="' + shot.image + '" alt="" style="width:100%;height:100%;object-fit:cover;">'
+            : galleryFrameSVG();
+          fig.innerHTML =
+            '<div class="frame">' + frameInner + '</div>' +
+            '<figcaption>' + (shot.caption || '') + '</figcaption>';
+          grid.appendChild(fig);
+        });
+      }
+
+      // Footer contact
+      if (data.footer_contact) {
+        const contactEl = document.getElementById('footerContact');
+        if (contactEl) contactEl.textContent = data.footer_contact;
+      }
+    })
+    .catch(() => {
+      // content.json missing or unreachable — page keeps its built-in fallback content.
     });
-  })();
 </script>
 
 </body>
