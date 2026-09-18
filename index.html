@@ -317,6 +317,14 @@
   }
   .event-title { font-weight: 600; margin-bottom: 3px; }
   .event-desc { color: var(--ink-soft); font-size: 0.95rem; }
+  .event-thumb {
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid var(--line);
+  }
 
   /* ---------- Officers ---------- */
   .officers {
@@ -780,7 +788,9 @@
         list.innerHTML = '';
         data.events.forEach(ev => {
           const li = document.createElement('li');
+          const thumb = ev.image ? '<img class="event-thumb" src="' + ev.image + '" alt="">' : '';
           li.innerHTML =
+            thumb +
             '<span class="event-date">' + (ev.date || '') + '</span>' +
             '<div>' +
             '<div class="event-title">' + (ev.title || '') + '</div>' +
