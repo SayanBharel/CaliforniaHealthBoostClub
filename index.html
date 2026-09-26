@@ -119,7 +119,7 @@
 
   .brand svg { width: 30px; height: 30px; flex-shrink: 0; }
 
-  nav.links {
+  .links {
     display: flex;
     gap: 28px;
     list-style: none;
@@ -127,7 +127,7 @@
     padding: 0;
   }
 
-  nav.links a {
+  .links a {
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 600;
@@ -137,7 +137,7 @@
     transition: color 0.15s, border-color 0.15s;
   }
 
-  nav.links a:hover { color: var(--maroon); border-color: var(--maroon); }
+  .links a:hover { color: var(--maroon); border-color: var(--maroon); }
 
   .menu-toggle {
     display: none;
@@ -153,7 +153,7 @@
   .menu-toggle svg { width: 20px; height: 20px; }
 
   @media (max-width: 720px) {
-    nav.links {
+    .links {
       position: absolute;
       top: 100%;
       left: 0;
@@ -165,7 +165,7 @@
       gap: 14px;
       display: none;
     }
-    nav.links.open { display: flex; }
+    .links.open { display: flex; }
     .menu-toggle { display: flex; }
   }
 
@@ -317,13 +317,71 @@
   }
   .event-title { font-weight: 600; margin-bottom: 3px; }
   .event-desc { color: var(--ink-soft); font-size: 0.95rem; }
-  .event-thumb {
-    width: 64px;
-    height: 64px;
-    border-radius: 10px;
-    object-fit: cover;
-    flex-shrink: 0;
+  .event-photos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .event-photo {
+    padding: 0;
     border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--card);
+    cursor: zoom-in;
+    width: 84px;
+    height: 84px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .event-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .event-photo:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  @media (max-width: 520px) {
+    .event-photo { width: 68px; height: 68px; }
+  }
+
+  /* Full-size photo viewer */
+  .photo-viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(20, 8, 12, 0.88);
+    padding: 56px 16px;
+  }
+  .photo-viewer.open { display: flex; }
+  .photo-viewer img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+  .viewer-btn {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    border: 0;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .viewer-btn:hover { background: rgba(255, 255, 255, 0.26); }
+  .viewer-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+  .viewer-close { top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; }
+  .viewer-prev { left: 12px; top: 50%; transform: translateY(-50%); }
+  .viewer-next { right: 12px; top: 50%; transform: translateY(-50%); }
+  .viewer-count {
+    position: absolute;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    left: 0; right: 0;
+    text-align: center;
+    color: #fff;
+    font-size: 0.9rem;
   }
 
   /* ---------- Officers ---------- */
@@ -788,14 +846,41 @@
         list.innerHTML = '';
         data.events.forEach(ev => {
           const li = document.createElement('li');
-          const thumb = ev.image ? '<img class="event-thumb" src="' + ev.image + '" alt="">' : '';
+          // Photos: new multi-photo list, plus the older single "image" field if present
+          const photos = [];
+          if (Array.isArray(ev.images)) {
+            ev.images.forEach(img => {
+              const src = typeof img === 'string' ? img : (img && img.image);
+              if (src) photos.push(src);
+            });
+          }
+          if (ev.image && !photos.includes(ev.image)) photos.unshift(ev.image);
+
           li.innerHTML =
-            thumb +
             '<span class="event-date">' + (ev.date || '') + '</span>' +
             '<div>' +
             '<div class="event-title">' + (ev.title || '') + '</div>' +
             '<div class="event-desc">' + (ev.desc || '') + '</div>' +
             '</div>';
+
+          if (photos.length) {
+            const strip = document.createElement('div');
+            strip.className = 'event-photos';
+            photos.forEach((src, i) => {
+              const btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'event-photo';
+              btn.setAttribute('aria-label', 'View photo ' + (i + 1) + ' of ' + photos.length + ' from ' + (ev.title || 'this event'));
+              const img = document.createElement('img');
+              img.src = src;
+              img.alt = '';
+              img.loading = 'lazy';
+              btn.appendChild(img);
+              btn.addEventListener('click', () => openPhotoViewer(photos, i, ev.title || ''));
+              strip.appendChild(btn);
+            });
+            li.querySelector('div').appendChild(strip);
+          }
           list.appendChild(li);
         });
       }
@@ -842,6 +927,71 @@
     .catch(() => {
       // content.json missing or unreachable — page keeps its built-in fallback content.
     });
+</script>
+
+<div class="photo-viewer" id="photoViewer" role="dialog" aria-modal="true" aria-label="Event photo">
+  <button type="button" class="viewer-btn viewer-close" id="viewerClose" aria-label="Close photo">×</button>
+  <button type="button" class="viewer-btn viewer-prev" id="viewerPrev" aria-label="Previous photo">‹</button>
+  <img id="viewerImg" src="" alt="">
+  <button type="button" class="viewer-btn viewer-next" id="viewerNext" aria-label="Next photo">›</button>
+  <div class="viewer-count" id="viewerCount"></div>
+</div>
+
+<script>
+  // ---- Full-size viewer for event photos ----
+  (function () {
+    const viewer = document.getElementById('photoViewer');
+    const img = document.getElementById('viewerImg');
+    const count = document.getElementById('viewerCount');
+    const prev = document.getElementById('viewerPrev');
+    const next = document.getElementById('viewerNext');
+    const closeBtn = document.getElementById('viewerClose');
+    let photos = [], index = 0, title = '', lastFocus = null;
+
+    function show() {
+      img.src = photos[index];
+      img.alt = title ? title + ' photo ' + (index + 1) : 'Event photo ' + (index + 1);
+      const many = photos.length > 1;
+      prev.style.display = many ? '' : 'none';
+      next.style.display = many ? '' : 'none';
+      count.textContent = many ? (index + 1) + ' / ' + photos.length : '';
+    }
+    function close() {
+      viewer.classList.remove('open');
+      document.body.style.overflow = '';
+      if (lastFocus) lastFocus.focus();
+    }
+    function step(d) { index = (index + d + photos.length) % photos.length; show(); }
+
+    window.openPhotoViewer = function (list, start, eventTitle) {
+      photos = list; index = start; title = eventTitle;
+      lastFocus = document.activeElement;
+      show();
+      viewer.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    };
+
+    closeBtn.addEventListener('click', close);
+    prev.addEventListener('click', () => step(-1));
+    next.addEventListener('click', () => step(1));
+    viewer.addEventListener('click', e => { if (e.target === viewer) close(); });
+    document.addEventListener('keydown', e => {
+      if (!viewer.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft' && photos.length > 1) step(-1);
+      else if (e.key === 'ArrowRight' && photos.length > 1) step(1);
+    });
+    // Swipe on phones
+    let startX = null;
+    viewer.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    viewer.addEventListener('touchend', e => {
+      if (startX === null || photos.length < 2) return;
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+      startX = null;
+    });
+  })();
 </script>
 
 </body>
