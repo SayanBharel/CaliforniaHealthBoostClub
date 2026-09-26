@@ -31,7 +31,12 @@ collections:
               - { label: "Date", name: "date", widget: "string" }
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Description", name: "desc", widget: "text" }
-              - { label: "Photo", name: "image", widget: "image", required: false }
+              - label: "Photos"
+                name: "images"
+                widget: "list"
+                required: false
+                hint: "Add as many photos as you like. Drag to reorder."
+                field: { label: "Photo", name: "image", widget: "image" }
 
           - label: "Officers"
             name: "officers"
