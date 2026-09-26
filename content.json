@@ -1,29 +1,33 @@
 {
   "meeting": {
-    "schedule": "Every other Wednesday",
-    "time_location": "At lunch · Room pending",
+    "schedule": "Every other Wednesday - 1st Meeting 9/30/26",
+    "time_location": "At lunch · Room E 102",
     "advisor": "Ms. Nootbar · nnootbar@esusd.org"
   },
   "events": [
     {
-      "date": "Tentatively 10/14/26",
+      "date": "Tentatively 10/24/26",
       "title": "Sun Safety Day",
-      "desc": "Talking to our community about sun safety and skin cancer prevention."
+      "desc": "Talking to our community about sun safety and skin cancer prevention. Set up a table at Rec Park, hand out sunscreen samples and information about skin cancer prevention",
+      "image": ""
     },
     {
       "date": "Add date",
       "title": "Journal club: preventable disease",
-      "desc": "A student-friendly walkthrough of a recent public health study, no medical background needed."
+      "desc": "A student-friendly walkthrough of a recent public health study, no medical background needed.",
+      "image": ""
     },
     {
       "date": "Add date",
       "title": "Guest speaker: local physician",
-      "desc": "A Q&A on what the path to medicine actually looks like, from pre-med to residency."
+      "desc": "A Q&A on what the path to medicine actually looks like, from pre-med to residency.",
+      "image": ""
     },
     {
       "date": "Add date",
       "title": "Senior living community visit",
-      "desc": "Talking with residents about preventable illness and fall prevention."
+      "desc": "Talking with residents about preventable illness and fall prevention.",
+      "image": ""
     }
   ],
   "officers": [
@@ -55,7 +59,7 @@
   "gallery": [
     {
       "caption": "Add photo — ESHS Club Fair 2026/Main Street Fair",
-      "image": ""
+      "image": "/admin/uploads/IMG_2149.jpeg"
     },
     {
       "caption": "Add photo — event highlight",
