@@ -521,6 +521,14 @@
     border-top: 1px solid var(--line);
     padding: 36px 0;
   }
+  .foot-email {
+    color: var(--maroon);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .foot-email:hover { color: var(--maroon-deep); }
+  .foot-email:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
   .foot-row {
     display: flex;
     justify-content: space-between;
@@ -945,7 +953,20 @@
       // Footer contact
       if (data.footer_contact) {
         const contactEl = document.getElementById('footerContact');
-        if (contactEl) contactEl.textContent = data.footer_contact;
+        if (contactEl) {
+          const contact = String(data.footer_contact).trim();
+          if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) {
+            // Looks like an email: make it a link that opens the visitor's mail app
+            const link = document.createElement('a');
+            link.href = 'mailto:' + contact;
+            link.textContent = contact;
+            link.className = 'foot-email';
+            contactEl.textContent = '';
+            contactEl.appendChild(link);
+          } else {
+            contactEl.textContent = contact;
+          }
+        }
       }
     })
     .catch(() => {
