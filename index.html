@@ -425,13 +425,24 @@
     border: 1px solid var(--line);
   }
   .shot .frame {
-    aspect-ratio: 4/3;
+    aspect-ratio: 4/5;
     background: var(--maroon-tint);
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .shot .frame svg { width: 42px; height: 42px; color: var(--maroon); opacity: 0.7; }
+  .shot-open {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+  }
+  .shot-open img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .shot-open:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
   .shot figcaption {
     padding: 12px 14px;
     font-size: 0.9rem;
@@ -905,15 +916,28 @@
       if (Array.isArray(data.gallery)) {
         const grid = document.getElementById('galleryGrid');
         grid.innerHTML = '';
+        const galleryPhotos = data.gallery.filter(s => s.image).map(s => s.image);
         data.gallery.forEach(shot => {
           const fig = document.createElement('figure');
           fig.className = 'shot';
-          const frameInner = shot.image
-            ? '<img src="' + shot.image + '" alt="" style="width:100%;height:100%;object-fit:cover;">'
-            : galleryFrameSVG();
           fig.innerHTML =
-            '<div class="frame">' + frameInner + '</div>' +
+            '<div class="frame">' + (shot.image ? '' : galleryFrameSVG()) + '</div>' +
             '<figcaption>' + (shot.caption || '') + '</figcaption>';
+          if (shot.image) {
+            // Show the whole photo (no cropping); tap to view full size
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'shot-open';
+            btn.setAttribute('aria-label', 'View full size: ' + (shot.caption || 'club photo'));
+            const img = document.createElement('img');
+            img.src = shot.image;
+            img.alt = shot.caption || '';
+            img.loading = 'lazy';
+            btn.appendChild(img);
+            btn.addEventListener('click', () =>
+              openPhotoViewer(galleryPhotos, galleryPhotos.indexOf(shot.image), shot.caption || ''));
+            fig.querySelector('.frame').appendChild(btn);
+          }
           grid.appendChild(fig);
         });
       }
